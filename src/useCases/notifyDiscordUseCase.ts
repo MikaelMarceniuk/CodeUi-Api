@@ -1,4 +1,6 @@
+import RecebemosSeuContatoEmail from '@emails/recebemosSeuContatoEmail'
 import Discord from '@libs/discord'
+import ResendLib from '@libs/resend'
 
 export interface INotifyDiscordRequest {
   name: string
@@ -13,7 +15,7 @@ interface INotifyDiscordResponse {
 }
 
 class NotifyDiscordUseCase {
-  constructor(private discord: Discord) {}
+  constructor(private discord: Discord, private resend: ResendLib) {}
 
   async execute(
     content: INotifyDiscordRequest,
@@ -21,6 +23,13 @@ class NotifyDiscordUseCase {
   ): Promise<INotifyDiscordResponse> {
     const dChannel = await this.discord.getChannel(channelId)
     const { id: messageId } = await dChannel.send(this.createMessage(content))
+
+    // TODO Handle error
+    await this.resend.sendEmail({
+      to: [content.email],
+      subject: 'Recebemos seu contato!',
+      html: RecebemosSeuContatoEmail({ nomeCliente: content.name }),
+    })
 
     return { messageId }
   }
