@@ -24,7 +24,7 @@ class App {
 
   async loadMiddlewares() {
     await this.app.register(cors, {
-      origin: 'https://codeui.com.br/',
+      origin: 'https://codeui.com.br',
     })
   }
 
