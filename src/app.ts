@@ -16,7 +16,7 @@ class App {
   }
 
   async listen() {
-    await this.app.listen({ port: env.PORT })
+    await this.app.listen({ host: '0.0.0.0', port: env.PORT })
     console.log(
       `====== HttpServer is up and running on port ${env.PORT} ======`
     )

@@ -5,8 +5,6 @@ class Discord {
   private static instance: Client<boolean>
 
   async init() {
-    console.log('Starting DiscordClient')
-
     Discord.instance = new Client({ intents: ['DirectMessages'] })
 
     Discord.instance.on('ready', () =>
