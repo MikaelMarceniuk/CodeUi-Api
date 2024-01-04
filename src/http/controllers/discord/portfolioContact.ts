@@ -10,11 +10,12 @@ const portfolioContactDiscordController = async (
   rep: FastifyReply
 ) => {
   const userSchema = z.object({
-    name: z.string(),
-    email: z.string().email(),
-    mobileNumber: z.string(),
-    hearAboutUs: z.string(),
-    aboutCustomerProject: z.string(),
+    clientName: z.string(),
+    clientEmail: z.string().email(),
+    clientMobileNumber: z.string(),
+    clientHearAboutUs: z.string(),
+    clientAboutProject: z.string(),
+    clientWayOfContact: z.string(),
   })
 
   const parsedBody = userSchema.parse(req.body)

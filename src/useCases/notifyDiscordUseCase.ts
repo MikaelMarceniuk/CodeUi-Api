@@ -3,11 +3,12 @@ import Discord from '@libs/discord'
 import ResendLib from '@libs/resend'
 
 export interface INotifyDiscordRequest {
-  name: string
-  email: string
-  mobileNumber: string
-  hearAboutUs: string
-  aboutCustomerProject: string
+  clientName: string
+  clientEmail: string
+  clientMobileNumber: string
+  clientHearAboutUs: string
+  clientAboutProject: string
+  clientWayOfContact: string
 }
 
 interface INotifyDiscordResponse {
@@ -26,21 +27,22 @@ class NotifyDiscordUseCase {
 
     // TODO Handle error
     await this.resend.sendEmail({
-      to: [content.email],
+      to: [content.clientEmail],
       subject: 'Recebemos seu contato!',
-      html: RecebemosSeuContatoEmail({ nomeCliente: content.name }),
+      html: RecebemosSeuContatoEmail({ nomeCliente: content.clientName }),
     })
 
     return { messageId }
   }
 
   private createMessage(content: INotifyDiscordRequest) {
-    let msg = `Usuario **${content.name}**, que ouviu sobre a gente pelo **${content.hearAboutUs}**, requisitou contato.\n\n`
+    let msg = `Usuario **${content.clientName}**, que ouviu sobre a gente pelo **${content.clientHearAboutUs}**, requisitou contato.\n\n`
     msg += `**======= Sobre o projeto =======**\n`
-    msg += `${content.aboutCustomerProject}\n\n`
+    msg += `${content.clientAboutProject}\n\n`
     msg += `**======= Informacoes de Contato =======**\n`
-    msg += `Email: ${content.email}\n`
-    msg += `Telefone: ${content.mobileNumber}`
+    msg += `Email: ${content.clientEmail}\n`
+    msg += `Telefone: ${content.clientMobileNumber}\n`
+    msg += `Forma preferida de contato: ${content.clientWayOfContact}`
 
     return msg
   }
