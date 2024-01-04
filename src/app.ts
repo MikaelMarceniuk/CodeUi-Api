@@ -2,6 +2,7 @@ import env from '@config/env'
 import discordRouter from '@controllers/discord/router'
 import Discord from '@libs/discord'
 import fastify, { FastifyInstance } from 'fastify'
+import cors from '@fastify/cors'
 
 class App {
   app: FastifyInstance
@@ -21,7 +22,11 @@ class App {
     )
   }
 
-  async loadMiddlewares() {}
+  async loadMiddlewares() {
+    await this.app.register(cors, {
+      origin: 'https://codeui.com.br/',
+    })
+  }
 
   async loadRoutes() {
     this.app.get('/api', async (_, reply) => reply.send('Hello World!'))
