@@ -2,6 +2,9 @@
   "name": "codeui-api",
   "version": "1.0.0",
   "license": "ISC",
+  "engines": {
+    "node": "18.18.2"
+  },
   "scripts": {
     "start:dev": "tsx watch src/server.ts",
     "start:prd": "node dist/server.js",
