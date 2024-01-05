@@ -3,6 +3,7 @@ import discordRouter from '@controllers/discord/router'
 import Discord from '@libs/discord'
 import fastify, { FastifyInstance } from 'fastify'
 import cors from '@fastify/cors'
+import MongoDb from '@libs/mongodb'
 
 class App {
   app: FastifyInstance
@@ -13,6 +14,7 @@ class App {
     await this.loadRoutes()
 
     await new Discord().init()
+    await new MongoDb().init()
   }
 
   async listen() {

@@ -1,8 +1,11 @@
 import RecebemosSeuContatoEmail from '@emails/recebemosSeuContatoEmail'
 import Discord from '@libs/discord'
 import ResendLib from '@libs/resend'
+import Contact, { IContactSchema } from '@models/contacts'
+import IContactRepository from '@repository/IContactRepository'
+import { HydratedDocument } from 'mongoose'
 
-export interface INotifyDiscordRequest {
+interface INotifyDiscordRequest {
   clientName: string
   clientEmail: string
   clientMobileNumber: string
@@ -13,26 +16,36 @@ export interface INotifyDiscordRequest {
 
 interface INotifyDiscordResponse {
   messageId: string
+  newContact: HydratedDocument<IContactSchema>
 }
 
 class NotifyDiscordUseCase {
-  constructor(private discord: Discord, private resend: ResendLib) {}
+  constructor(
+    private contactRepo: IContactRepository,
+    private discord: Discord,
+    private resend: ResendLib
+  ) {}
 
   async execute(
     content: INotifyDiscordRequest,
     channelId: string
   ): Promise<INotifyDiscordResponse> {
+    // TODO Handle error
+    const newContact = await this.contactRepo.save({
+      ...content,
+      createdAt: new Date().toJSON(),
+    })
+
     const dChannel = await this.discord.getChannel(channelId)
     const { id: messageId } = await dChannel.send(this.createMessage(content))
 
-    // TODO Handle error
     await this.resend.sendEmail({
       to: [content.clientEmail],
       subject: 'Recebemos seu contato!',
       html: RecebemosSeuContatoEmail({ nomeCliente: content.clientName }),
     })
 
-    return { messageId }
+    return { messageId, newContact }
   }
 
   private createMessage(content: INotifyDiscordRequest) {

@@ -1,6 +1,7 @@
 import env from '@config/env'
 import Discord from '@libs/discord'
 import ResendLib from '@libs/resend'
+import MongoDbContactRepo from '@repository/mongodb/mongoDbContactRepo'
 import NotifyDiscordUseCase from '@useCases/notifyDiscordUseCase'
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
@@ -20,10 +21,11 @@ const portfolioContactDiscordController = async (
 
   const parsedBody = userSchema.parse(req.body)
 
-  await new NotifyDiscordUseCase(new Discord(), new ResendLib()).execute(
-    parsedBody,
-    env.LOGS_PORTFOLIO
-  )
+  await new NotifyDiscordUseCase(
+    new MongoDbContactRepo(),
+    new Discord(),
+    new ResendLib()
+  ).execute(parsedBody, env.LOGS_PORTFOLIO)
 
   rep.statusCode = 201
   rep.send()
