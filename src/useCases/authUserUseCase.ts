@@ -1,7 +1,8 @@
 import { IUserSchema } from '@models/user'
 import IUserRepository from '@repository/IUserRepository'
-import doesPasswordHashMatchPassword from '@utils/doesPasswordHashMatchPassword'
+import bcrypt from 'bcrypt'
 import { HydratedDocument } from 'mongoose'
+import InvalidCredentialsError from './errors/InvalidCredentials'
 
 interface IAuthUserRequest {
   email: string
@@ -16,20 +17,14 @@ class AuthUserUseCase {
   constructor(private userRepo: IUserRepository) {}
 
   async execute(data: IAuthUserRequest): Promise<IAuthUserResponse> {
-    // TODO Handle Errors
-
     const dbUserByEmail = await this.userRepo.findByEmail(data.email)
-    if (dbUserByEmail.length == 0) {
-      throw new Error('No user found with email')
-    }
+    if (dbUserByEmail.length == 0) throw new InvalidCredentialsError()
 
-    const isPasswordCorrect = await doesPasswordHashMatchPassword(
+    const isPasswordCorrect = await await bcrypt.compare(
       data.password,
       dbUserByEmail[0].password
     )
-    if (!isPasswordCorrect) {
-      throw new Error('Password not valid')
-    }
+    if (!isPasswordCorrect) throw new InvalidCredentialsError()
 
     return {
       user: dbUserByEmail[0],
