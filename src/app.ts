@@ -4,6 +4,7 @@ import Discord from '@libs/discord'
 import fastify, { FastifyInstance } from 'fastify'
 import cors from '@fastify/cors'
 import MongoDb from '@libs/mongodb'
+import userRouter from '@controllers/user/router'
 
 class App {
   app: FastifyInstance
@@ -34,6 +35,7 @@ class App {
     this.app.get('/api', async (_, reply) => reply.send('Hello World!'))
 
     this.app.register(discordRouter, { prefix: '/api/discord' })
+    this.app.register(userRouter, { prefix: '/api/user' })
   }
 }
 
