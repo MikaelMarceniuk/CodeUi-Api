@@ -28,7 +28,10 @@ class App {
 
   async loadMiddlewares() {
     await this.app.register(cors, {
-      origin: 'https://codeui.com.br',
+      origin:
+        env.NODE_ENV == 'DEV'
+          ? 'http://localhost:3000'
+          : ['https://codeui.com.br', 'https://dashboard-codeui.vercel.app/'],
     })
 
     await this.app.register(jwt, { secret: env.JWT_SECRET })
