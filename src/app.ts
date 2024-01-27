@@ -31,7 +31,7 @@ class App {
       origin:
         env.NODE_ENV == 'DEV'
           ? 'http://localhost:3000'
-          : ['https://codeui.com.br', 'https://dashboard-codeui.vercel.app/'],
+          : ['https://codeui.com.br', 'https://dashboard-codeui.vercel.app'],
     })
 
     await this.app.register(jwt, { secret: env.JWT_SECRET })
