@@ -3,7 +3,9 @@ import discordRouter from '@controllers/discord/router'
 import Discord from '@libs/discord'
 import fastify, { FastifyInstance } from 'fastify'
 import cors from '@fastify/cors'
+import jwt from '@fastify/jwt'
 import MongoDb from '@libs/mongodb'
+import userRouter from '@controllers/user/router'
 
 class App {
   app: FastifyInstance
@@ -28,12 +30,15 @@ class App {
     await this.app.register(cors, {
       origin: 'https://codeui.com.br',
     })
+
+    await this.app.register(jwt, { secret: env.JWT_SECRET })
   }
 
   async loadRoutes() {
     this.app.get('/api', async (_, reply) => reply.send('Hello World!'))
 
     this.app.register(discordRouter, { prefix: '/api/discord' })
+    this.app.register(userRouter, { prefix: '/api/user' })
   }
 }
 

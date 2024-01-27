@@ -7,6 +7,7 @@ const envSchema = z.object({
   LOGS_PORTFOLIO: z.string(),
   RESEND_TOKEN: z.string(),
   DATABASE_URL: z.string(),
+  JWT_SECRET: z.string(),
 })
 
 const _env = envSchema.safeParse(process.env)
