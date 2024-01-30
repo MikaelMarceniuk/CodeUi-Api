@@ -11,6 +11,15 @@ class PrismaUserRepo implements IUserRepository {
 		return await Postgresql.getInstance().user.findUnique({ where: { email } })
 	}
 
+	async getAllInfoById(id: string): Promise<Prisma.UserGetPayload<{ include: { favorites: true } }> | null> {
+		return await Postgresql.getInstance().user.findUnique({
+			where: { id },
+			include: {
+				favorites: true
+			}
+		})
+	}
+
 	async save(data: Prisma.UserCreateInput) {
 		return await Postgresql.getInstance().user.create({ data })
 	}

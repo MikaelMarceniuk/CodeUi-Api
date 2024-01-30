@@ -24,6 +24,18 @@ class InMemoryUserRepo implements IUserRepository {
     return await InMemoryPostgresql.getInstance().public.one(`select * from "User" where "User".id = '${uuid}'`)
   }
 
+  async getAllInfoById(id: string) {
+    const dbUser = await this.findById(id)
+    if(!dbUser)
+      return null
+
+    dbUser.favorites = await InMemoryPostgresql.getInstance().public.many(
+      `select * from "UserFavorite" where "UserFavorite".user_id = '${dbUser.id}'`
+    )
+
+    return dbUser
+  }
+
   async update(id: string, data: Prisma.UserUncheckedUpdateInput) {
     await InMemoryPostgresql.getInstance().public.query(
       `update
