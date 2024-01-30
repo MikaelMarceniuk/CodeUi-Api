@@ -18,8 +18,13 @@ const authUserController = async (req: FastifyRequest, rep: FastifyReply) => {
     )
 
     const accessToken = await rep.jwtSign(
-      {},
-      { sign: { sub: user.id, expiresIn: '10m' } }
+      { id: user.id },
+      {
+        sign: {
+          sub: user.id,
+          expiresIn: '10m',
+        }
+      }
     )
 
     rep.statusCode = 200
