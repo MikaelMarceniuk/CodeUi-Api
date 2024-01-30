@@ -1,7 +1,7 @@
-import { FastifyRequest, FastifyReply } from 'fastify'
-import { z } from 'zod'
 import PrismaUserRepo from '@repository/prisma/PrismaUserRepo'
 import updateUserUseCase from '@useCases/userUseCase/updateUserUseCase'
+import { FastifyReply, FastifyRequest } from 'fastify'
+import { z } from 'zod'
 
 const updateUserController = async (req: FastifyRequest, rep: FastifyReply) => {
   const userSchema = z.object({

@@ -1,11 +1,12 @@
 import env from '@config/env'
-import Discord from '@libs/discord'
-import fastify, { FastifyInstance } from 'fastify'
-import cors from '@fastify/cors'
-import jwt from '@fastify/jwt'
-import Postgresql from '@libs/postgresql'
 import discordRouter from '@controllers/discord/router'
 import userRouter from '@controllers/user/router'
+import userFavoriteRouter from '@controllers/userFavorite/router'
+import cors from '@fastify/cors'
+import jwt from '@fastify/jwt'
+import Discord from '@libs/discord'
+import Postgresql from '@libs/postgresql'
+import fastify, { FastifyInstance } from 'fastify'
 
 class App {
   app: FastifyInstance
@@ -42,6 +43,7 @@ class App {
 
     this.app.register(discordRouter, { prefix: '/api/discord' })
     this.app.register(userRouter, { prefix: '/api/user' })
+    this.app.register(userFavoriteRouter, { prefix: '/api/user-favorite' })
   }
 }
 

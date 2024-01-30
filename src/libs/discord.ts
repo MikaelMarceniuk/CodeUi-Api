@@ -1,4 +1,3 @@
-import env from '@config/env'
 import { Client, TextChannel } from 'discord.js'
 
 class Discord {
