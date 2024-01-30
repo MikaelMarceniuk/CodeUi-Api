@@ -1,27 +1,26 @@
 import RecebemosSeuContatoEmail from '@emails/recebemosSeuContatoEmail'
 import Discord from '@libs/discord'
 import ResendLib from '@libs/resend'
-import Contact, { IContactSchema } from '@models/contacts'
-import IContactRepository from '@repository/IContactRepository'
-import { HydratedDocument } from 'mongoose'
+import { PortfolioContact } from '@prisma/client'
+import IPortfolioContactRepository from '@repository/IPortfolioContactRepository'
 
 interface INotifyDiscordRequest {
-  clientName: string
-  clientEmail: string
-  clientMobileNumber: string
-  clientHearAboutUs: string
-  clientAboutProject: string
-  clientWayOfContact: string
+  name: string
+  email: string
+  mobileNumber: string
+  hearAboutUs: string
+  aboutProject: string
+  wayOfContact: string
 }
 
 interface INotifyDiscordResponse {
   messageId: string
-  newContact: HydratedDocument<IContactSchema>
+  newContact: PortfolioContact
 }
 
 class NotifyDiscordUseCase {
   constructor(
-    private contactRepo: IContactRepository,
+    private contactRepo: IPortfolioContactRepository,
     private discord: Discord,
     private resend: ResendLib
   ) {}
@@ -32,30 +31,34 @@ class NotifyDiscordUseCase {
   ): Promise<INotifyDiscordResponse> {
     // TODO Handle error
     const newContact = await this.contactRepo.save({
-      ...content,
-      createdAt: new Date().toJSON(),
+      name: content.name,
+      email: content.email,
+      mobile_number: content.mobileNumber,
+      hear_about_us: content.hearAboutUs,
+      about_project: content.aboutProject,
+      way_of_contact: content.wayOfContact
     })
 
     const dChannel = await this.discord.getChannel(channelId)
     const { id: messageId } = await dChannel.send(this.createMessage(content))
 
     await this.resend.sendEmail({
-      to: [content.clientEmail],
+      to: [content.email],
       subject: 'Recebemos seu contato!',
-      html: RecebemosSeuContatoEmail({ nomeCliente: content.clientName }),
+      html: RecebemosSeuContatoEmail({ nomeCliente: content.name }),
     })
 
     return { messageId, newContact }
   }
 
-  private createMessage(content: INotifyDiscordRequest) {
-    let msg = `Usuario **${content.clientName}**, que ouviu sobre a gente pelo **${content.clientHearAboutUs}**, requisitou contato.\n\n`
+  private createMessage({name, email, aboutProject, mobileNumber, hearAboutUs, wayOfContact}: INotifyDiscordRequest) {
+    let msg = `Usuario **${name}**, que ouviu sobre a gente pelo **${hearAboutUs}**, requisitou contato.\n\n`
     msg += `**======= Sobre o projeto =======**\n`
-    msg += `${content.clientAboutProject}\n\n`
+    msg += `${aboutProject}\n\n`
     msg += `**======= Informacoes de Contato =======**\n`
-    msg += `Email: ${content.clientEmail}\n`
-    msg += `Telefone: ${content.clientMobileNumber}\n`
-    msg += `Forma preferida de contato: ${content.clientWayOfContact}`
+    msg += `Email: ${email}\n`
+    msg += `Telefone: ${mobileNumber}\n`
+    msg += `Forma preferida de contato: ${wayOfContact}`
 
     return msg
   }

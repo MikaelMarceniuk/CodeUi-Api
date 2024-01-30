@@ -1,7 +1,7 @@
-import MongoDbUserRepo from '@repository/mongodb/mongoDbUserRepo'
-import CreateUserUseCase from '@useCases/createUserUseCase'
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
+import CreateUserUseCase from '@useCases/userUseCase/createUserUseCase'
+import PrismaUserRepo from '@repository/prisma/PrismaUserRepo'
 
 const createUserController = async (req: FastifyRequest, rep: FastifyReply) => {
   const userSchema = z.object({
@@ -11,7 +11,7 @@ const createUserController = async (req: FastifyRequest, rep: FastifyReply) => {
 
   const parsedBody = userSchema.parse(req.body)
 
-  await new CreateUserUseCase(new MongoDbUserRepo()).execute(parsedBody)
+  await new CreateUserUseCase(new PrismaUserRepo()).execute(parsedBody)
 
   rep.statusCode = 201
   rep.send()

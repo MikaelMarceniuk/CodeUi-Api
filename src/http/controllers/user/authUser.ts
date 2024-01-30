@@ -1,8 +1,8 @@
-import MongoDbUserRepo from '@repository/mongodb/mongoDbUserRepo'
-import authUserUseCase from '@useCases/authUserUseCase'
-import InvalidCredentialsError from '@useCases/errors/InvalidCredentials'
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
+import authUserUseCase from '@useCases/userUseCase/authUserUseCase'
+import InvalidCredentialsError from '@useCases/errors/InvalidCredentials'
+import PrismaUserRepo from '@repository/prisma/PrismaUserRepo'
 
 const authUserController = async (req: FastifyRequest, rep: FastifyReply) => {
   try {
@@ -13,13 +13,18 @@ const authUserController = async (req: FastifyRequest, rep: FastifyReply) => {
 
     const parsedBody = userSchema.parse(req.body)
 
-    const { user } = await new authUserUseCase(new MongoDbUserRepo()).execute(
+    const { user } = await new authUserUseCase(new PrismaUserRepo()).execute(
       parsedBody
     )
 
     const accessToken = await rep.jwtSign(
-      {},
-      { sign: { sub: user.id, expiresIn: '10m' } }
+      { id: user.id },
+      {
+        sign: {
+          sub: user.id,
+          expiresIn: '10m',
+        }
+      }
     )
 
     rep.statusCode = 200
