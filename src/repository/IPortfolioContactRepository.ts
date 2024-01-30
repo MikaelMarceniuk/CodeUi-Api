@@ -1,7 +1,7 @@
 import { PortfolioContact, Prisma } from "@prisma/client"
 
-interface IIPortfolioContactRepository {
+interface IPortfolioContactRepository {
   save(data: Prisma.PortfolioContactCreateInput): Promise<PortfolioContact>
 }
 
-export default IIPortfolioContactRepository
+export default IPortfolioContactRepository

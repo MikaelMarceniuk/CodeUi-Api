@@ -40,7 +40,7 @@ class App {
   async loadRoutes() {
     this.app.get('/api', async (_, reply) => reply.send('Hello World!'))
 
-    // this.app.register(discordRouter, { prefix: '/api/discord' })
+    this.app.register(discordRouter, { prefix: '/api/discord' })
     this.app.register(userRouter, { prefix: '/api/user' })
   }
 }
