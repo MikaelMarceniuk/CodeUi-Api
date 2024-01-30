@@ -14,7 +14,7 @@ class GetUserInfoUseCase {
   constructor(private userRepo: IUserRepository) {}
 
   async execute({ userId }: IGetUserInfoRequest): Promise<IGetUserInfoResponse> {
-    let dbUser = await this.userRepo.findById(userId)
+    let dbUser = await this.userRepo.getAllInfoById(userId)
     if(!dbUser)
       throw new UserNotFoundError()
     
