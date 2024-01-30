@@ -16,7 +16,7 @@ class CreateUserUseCase {
 
   async execute(data: ICreateUserRequest): Promise<ICreateUserResponse> {
     const dbUser = await this.userRepo.findByEmail(data.email)
-    if (!dbUser)
+    if (dbUser)
       throw new Error('User with email')
 
     const newDbUser = await this.userRepo.save({
