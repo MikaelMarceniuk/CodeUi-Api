@@ -20,3 +20,14 @@ model User {
   preferred_currency String?
   created_at DateTime @default(now())
 }
+
+model PortfolioContact {
+  id Int @id @default(autoincrement())
+  name String
+  email String
+  mobile_number String
+  hear_about_us String
+  about_project String
+  way_of_contact String
+  create_at DateTime @default(now())
+}

@@ -1,9 +1,8 @@
-import { IUserSchema } from '@models/user'
-import { HydratedDocument } from 'mongoose'
+import { Prisma, User } from '@prisma/client'
 
 interface IUserRepository {
-  findByEmail(email: string): Promise<HydratedDocument<IUserSchema>[]>
-  save(data: IUserSchema): Promise<HydratedDocument<IUserSchema>>
+  findByEmail(email: string): Promise<User>
+  save(data: Prisma.UserCreateInput): Promise<User>
 }
 
 export default IUserRepository
