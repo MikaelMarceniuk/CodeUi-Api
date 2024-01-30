@@ -19,6 +19,16 @@ model User {
   avatar String?
   preferred_currency String?
   created_at DateTime @default(now())
+
+  favorites UserFavorite[]
+}
+
+model UserFavorite {
+  id Int @id @default(autoincrement())
+  user_id String
+  name String
+
+  user User @relation(fields: [user_id], references: [id])
 }
 
 model PortfolioContact {
