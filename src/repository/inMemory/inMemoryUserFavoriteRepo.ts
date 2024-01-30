@@ -1,9 +1,16 @@
 import InMemoryPostgresql from "@libs/inMemoryPostgres";
-import { Prisma } from "@prisma/client";
+import { Prisma, UserFavorite } from "@prisma/client";
 import IUserFavoriteRepository from "@repository/IUserFavoriteRepository";
 
 class InMemoryUserFavoriteRepo implements IUserFavoriteRepository {
-  async save(data: Prisma.UserFavoriteUncheckedCreateInput) {
+  async findById(id: number): Promise<UserFavorite | null> {
+    const dbUserFav = await InMemoryPostgresql.getInstance().public.one(
+      `select * from "UserFavorite" where "UserFavorite".id = ${id}`
+    )
+    return dbUserFav || null
+  }
+
+  async save(data: Prisma.UserFavoriteUncheckedCreateInput): Promise<UserFavorite> {
     const { count } = await InMemoryPostgresql.getInstance().public.one(`select count(*) from "UserFavorite"`)
     const newUserId = count + 1
 
@@ -14,8 +21,10 @@ class InMemoryUserFavoriteRepo implements IUserFavoriteRepository {
     return await InMemoryPostgresql.getInstance().public.one(`select * from "UserFavorite" where "UserFavorite".id = '${newUserId}'`)
   }
 
-  async delete(id: string): Promise<void> {
-    
+  async delete(id: number): Promise<void> {
+    await InMemoryPostgresql.getInstance().public.query(
+      `delete from "UserFavorite" where id = ${id}`
+    )
   }
 }
 
