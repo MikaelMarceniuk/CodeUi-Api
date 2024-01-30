@@ -8,7 +8,7 @@
   "scripts": {
     "start:dev": "tsx watch src/server.ts",
     "start:prd": "node dist/server.js",
-    "build": "tsup src/*",
+    "build": "tsup --external typeorm,slonik,pg-promise,knex,kysely,@mikro-orm/core,@mikro-orm/postgresql src/*",
     "lint": "eslint src --ext .ts --fix",
     "test": "vitest run --dir src/useCases",
     "test:watch": "vitest --dir src/useCases"
