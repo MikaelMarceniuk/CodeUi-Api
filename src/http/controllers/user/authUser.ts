@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
-import authUserUseCase from '@useCases/authUserUseCase'
+import authUserUseCase from '@useCases/userUseCase/authUserUseCase'
 import InvalidCredentialsError from '@useCases/errors/InvalidCredentials'
 import PrismaUserRepo from '@repository/prisma/PrismaUserRepo'
 

@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
-import CreateUserUseCase from '@useCases/createUserUseCase'
+import CreateUserUseCase from '@useCases/userUseCase/createUserUseCase'
 import PrismaUserRepo from '@repository/prisma/PrismaUserRepo'
 
 const createUserController = async (req: FastifyRequest, rep: FastifyReply) => {
