@@ -1,10 +1,10 @@
 import env from '@config/env'
-import discordRouter from '@controllers/discord/router'
 import Discord from '@libs/discord'
 import fastify, { FastifyInstance } from 'fastify'
 import cors from '@fastify/cors'
 import jwt from '@fastify/jwt'
-import MongoDb from '@libs/mongodb'
+import Postgresql from '@libs/postgresql'
+import discordRouter from '@controllers/discord/router'
 import userRouter from '@controllers/user/router'
 
 class App {
@@ -16,7 +16,7 @@ class App {
     await this.loadRoutes()
 
     await new Discord().init()
-    await new MongoDb().init()
+    await new Postgresql().init()
   }
 
   async listen() {
@@ -40,8 +40,8 @@ class App {
   async loadRoutes() {
     this.app.get('/api', async (_, reply) => reply.send('Hello World!'))
 
-    this.app.register(discordRouter, { prefix: '/api/discord' })
-    this.app.register(userRouter, { prefix: '/api/user' })
+    // this.app.register(discordRouter, { prefix: '/api/discord' })
+    // this.app.register(userRouter, { prefix: '/api/user' })
   }
 }
 
