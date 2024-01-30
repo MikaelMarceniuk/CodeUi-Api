@@ -1,9 +1,9 @@
 import { FastifyInstance } from 'fastify'
-import createUserController from './createUser'
-import authUserController from './authUser'
-import updateUserController from './updateUser'
 import jwtValidator from 'src/http/middlewares/jwtValidator'
+import authUserController from './authUser'
+import createUserController from './createUser'
 import getUserInfoController from './getUserInfo'
+import updateUserController from './updateUser'
 
 const userRouter = async (app: FastifyInstance) => {
   app.post('/', createUserController)

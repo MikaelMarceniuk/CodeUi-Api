@@ -1,4 +1,4 @@
-import { IBackup, IMemoryDb, newDb } from "pg-mem"
+import { IBackup, IMemoryDb, newDb } from "pg-mem";
 
 class InMemoryPostgresql {
   private static instance: IMemoryDb

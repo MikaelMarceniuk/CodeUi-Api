@@ -1,11 +1,11 @@
 import env from '@config/env'
-import Discord from '@libs/discord'
-import fastify, { FastifyInstance } from 'fastify'
-import cors from '@fastify/cors'
-import jwt from '@fastify/jwt'
-import Postgresql from '@libs/postgresql'
 import discordRouter from '@controllers/discord/router'
 import userRouter from '@controllers/user/router'
+import cors from '@fastify/cors'
+import jwt from '@fastify/jwt'
+import Discord from '@libs/discord'
+import Postgresql from '@libs/postgresql'
+import fastify, { FastifyInstance } from 'fastify'
 
 class App {
   app: FastifyInstance

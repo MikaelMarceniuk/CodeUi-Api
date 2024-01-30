@@ -1,8 +1,8 @@
-import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import InMemoryPostgresql from '@libs/inMemoryPostgres'
-import InMemoryUserRepo from '@repository/inMemory/inMemoryUserRepo'
 import { User } from '@prisma/client'
+import InMemoryUserRepo from '@repository/inMemory/inMemoryUserRepo'
 import UserNotFoundError from '@useCases/errors/UserNotFoundError'
+import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import UpdateUserUseCase from '../updateUserUseCase'
 
 let inMemoryPostgresql: InMemoryPostgresql

@@ -1,8 +1,8 @@
-import { FastifyRequest, FastifyReply } from 'fastify'
-import { z } from 'zod'
-import authUserUseCase from '@useCases/userUseCase/authUserUseCase'
-import InvalidCredentialsError from '@useCases/errors/InvalidCredentials'
 import PrismaUserRepo from '@repository/prisma/PrismaUserRepo'
+import InvalidCredentialsError from '@useCases/errors/InvalidCredentials'
+import authUserUseCase from '@useCases/userUseCase/authUserUseCase'
+import { FastifyReply, FastifyRequest } from 'fastify'
+import { z } from 'zod'
 
 const authUserController = async (req: FastifyRequest, rep: FastifyReply) => {
   try {
