@@ -1,7 +1,6 @@
-import { IUserSchema } from '@models/user'
+import { User } from '@prisma/client'
 import IUserRepository from '@repository/IUserRepository'
 import hashUserPassword from '@utils/hashUserPassword'
-import { HydratedDocument } from 'mongoose'
 
 interface ICreateUserRequest {
   email: string
@@ -9,25 +8,25 @@ interface ICreateUserRequest {
 }
 
 interface ICreateUserResponse {
-  user: HydratedDocument<IUserSchema>
+  user: User
 }
 
 class CreateUserUseCase {
   constructor(private userRepo: IUserRepository) {}
 
   async execute(data: ICreateUserRequest): Promise<ICreateUserResponse> {
-    const dbUserByEmail = await this.userRepo.findByEmail(data.email)
-    if (dbUserByEmail.length > 0) {
+    const dbUser = await this.userRepo.findByEmail(data.email)
+    if (!dbUser)
       throw new Error('User with email')
-    }
 
-    const dbUser = await this.userRepo.save({
+    const newDbUser = await this.userRepo.save({
+      username: data.email.split('@')[0],
       email: data.email,
-      password: await hashUserPassword(data.password),
+      password_hash: await hashUserPassword(data.password),
     })
 
     return {
-      user: dbUser,
+      user: newDbUser,
     }
   }
 }

@@ -1,8 +1,7 @@
-import { IUserSchema } from '@models/user'
 import IUserRepository from '@repository/IUserRepository'
 import bcrypt from 'bcrypt'
-import { HydratedDocument } from 'mongoose'
 import InvalidCredentialsError from './errors/InvalidCredentials'
+import { User } from '@prisma/client'
 
 interface IAuthUserRequest {
   email: string
@@ -10,24 +9,24 @@ interface IAuthUserRequest {
 }
 
 interface IAuthUserResponse {
-  user: HydratedDocument<IUserSchema>
+  user: User
 }
 
 class AuthUserUseCase {
   constructor(private userRepo: IUserRepository) {}
 
   async execute(data: IAuthUserRequest): Promise<IAuthUserResponse> {
-    const dbUserByEmail = await this.userRepo.findByEmail(data.email)
-    if (dbUserByEmail.length == 0) throw new InvalidCredentialsError()
+    const dbUser = await this.userRepo.findByEmail(data.email)
+    if (!dbUser) throw new InvalidCredentialsError()
 
     const isPasswordCorrect = await await bcrypt.compare(
       data.password,
-      dbUserByEmail[0].password
+      dbUser.password_hash
     )
     if (!isPasswordCorrect) throw new InvalidCredentialsError()
 
     return {
-      user: dbUserByEmail[0],
+      user: dbUser,
     }
   }
 }

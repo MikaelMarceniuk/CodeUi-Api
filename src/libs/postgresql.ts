@@ -15,7 +15,7 @@ class Postgresql {
     }
   }
 
-  getInstance() {
+  static getInstance() {
     if (!Postgresql.instance) {
       console.error('Postgresql instance not instantiated.')
     }
