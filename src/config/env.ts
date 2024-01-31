@@ -9,6 +9,9 @@ const envSchema = z.object({
   RESEND_TOKEN: z.string(),
   DATABASE_URL: z.string(),
   JWT_SECRET: z.string(),
+  GOOGLE_PROJECT_ID: z.string(),
+  GOOGLE_STORAGE_EMAIL: z.string(),
+  GOOGLE_STORAGE_KEY: z.string(),
 })
 
 const _env = envSchema.safeParse(process.env)

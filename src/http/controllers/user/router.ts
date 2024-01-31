@@ -6,6 +6,7 @@ import createUserFavoriteController from './createUserFavoriteController'
 import deleteUserFavoriteController from './deleteUserFavoriteController'
 import getUserInfoController from './getUserInfo'
 import updateUserController from './updateUser'
+import updateUserAvatarController from './updateUserAvatarController'
 import updateUserPlanController from './updateUserPlanController'
 
 const userRouter = async (app: FastifyInstance) => {
@@ -16,8 +17,10 @@ const userRouter = async (app: FastifyInstance) => {
   app.put('/', { onRequest: [jwtValidator] }, updateUserController)
   app.patch('/plan', { onRequest: [jwtValidator] }, updateUserPlanController)
 
-  app.post('/user/favorite', { onRequest: [jwtValidator] }, createUserFavoriteController)
-  app.delete('/user/favorite/:id', { onRequest: [jwtValidator] }, deleteUserFavoriteController)
+  app.post('/favorite', { onRequest: [jwtValidator] }, createUserFavoriteController)
+  app.delete('/favorite/:id', { onRequest: [jwtValidator] }, deleteUserFavoriteController)
+
+  app.patch('/avatar', { onRequest: [jwtValidator] }, updateUserAvatarController)
 }
 
 export default userRouter
