@@ -1,6 +1,6 @@
 import { resolve } from "node:path"
 
-export const getUploadsFolderDir = () => resolve(__dirname, '..', '..', 'uploads')
+export const getUploadsFolderDir = () => resolve(__dirname, '..', 'uploads')
 
 export const generateNewAvatarFilename = (
   data: { 
