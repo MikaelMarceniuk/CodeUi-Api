@@ -3,10 +3,12 @@ import IUserRepository from '@repository/IUserRepository'
 import UserNotFoundError from '@useCases/errors/UserNotFoundError'
 
 interface IUpdateUserRequest {
-  username: string
-  contact: string
-  avatar: string
-  preferred_currency: string
+  userId: string
+  data: {
+    username?: string
+    contact?: string
+    preferred_currency?: string
+  }
 }
 
 interface IUpdateUserResponse {
@@ -16,7 +18,10 @@ interface IUpdateUserResponse {
 class UpdateUserUseCase {
   constructor(private userRepo: IUserRepository) {}
 
-  async execute(userId: string, data: IUpdateUserRequest): Promise<IUpdateUserResponse> {
+  async execute({
+    userId,
+    data
+  }: IUpdateUserRequest): Promise<IUpdateUserResponse> {
     let dbUser = await this.userRepo.findById(userId)
     if(!dbUser)
       throw new UserNotFoundError()
@@ -24,11 +29,9 @@ class UpdateUserUseCase {
     dbUser = await this.userRepo.update(
       userId,
       {
-        ...dbUser,
-        username: data.username,
-        contact: data.contact,
-        avatar: data.avatar,
-        preferred_currency: data.preferred_currency
+        username: data.username || dbUser.username,
+        contact: data.contact || dbUser.contact,
+        preferred_currency: data.preferred_currency || dbUser.preferred_currency
       }
     )
     
