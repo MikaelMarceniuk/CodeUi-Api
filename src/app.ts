@@ -3,6 +3,7 @@ import discordRouter from '@controllers/discord/router'
 import userRouter from '@controllers/user/router'
 import cors from '@fastify/cors'
 import jwt from '@fastify/jwt'
+import fastifyMultipart from '@fastify/multipart'
 import Discord from '@libs/discord'
 import Postgresql from '@libs/postgresql'
 import fastify, { FastifyInstance } from 'fastify'
@@ -35,6 +36,7 @@ class App {
     })
 
     await this.app.register(jwt, { secret: env.JWT_SECRET })
+    await this.app.register(fastifyMultipart)
   }
 
   async loadRoutes() {
