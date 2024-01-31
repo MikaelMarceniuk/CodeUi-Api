@@ -9,7 +9,7 @@ class GoogleStorage {
       projectId: env.GOOGLE_PROJECT_ID,
       credentials: {
         client_email: env.GOOGLE_STORAGE_EMAIL,
-        private_key: env.GOOGLE_STORAGE_KEY
+        private_key: env.GOOGLE_STORAGE_KEY.replace(/\\n/g, "\n")
       }
     })
   }
