@@ -1,18 +1,17 @@
 import env from "@config/env";
 import { Storage } from "@google-cloud/storage";
-import { resolve } from "node:path";
 
 class GoogleStorage {
   private storage: Storage
 
-  constructor() {
+  constructor() {   
     this.storage = new Storage({
-      keyFile: this.getKeyfilePath()
+      projectId: env.GOOGLE_PROJECT_ID,
+      credentials: {
+        client_email: env.GOOGLE_STORAGE_EMAIL,
+        private_key: env.GOOGLE_STORAGE_KEY
+      }
     })
-  }
-
-  private getKeyfilePath() {
-    return resolve(__dirname, '..', '..', 'keys', 'codeui--storage.json')
   }
 
   async uploadBucketfile(filename: string, filepath: string) {
