@@ -4,8 +4,10 @@ import userRouter from '@controllers/user/router'
 import cors from '@fastify/cors'
 import jwt from '@fastify/jwt'
 import fastifyMultipart from '@fastify/multipart'
+import fastifyStatic from '@fastify/static'
 import Discord from '@libs/discord'
 import Postgresql from '@libs/postgresql'
+import { getUploadsFolderDir } from '@utils/filesUtil'
 import fastify, { FastifyInstance } from 'fastify'
 
 class App {
@@ -37,6 +39,12 @@ class App {
 
     await this.app.register(jwt, { secret: env.JWT_SECRET })
     await this.app.register(fastifyMultipart)
+
+    if(env.NODE_ENV == 'DEV')
+      await this.app.register(fastifyStatic, {
+        root: getUploadsFolderDir(),
+        prefix: '/uploads',
+      })
   }
 
   async loadRoutes() {

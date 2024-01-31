@@ -1,5 +1,8 @@
+import env from '@config/env'
+import PrismaUserRepo from '@repository/prisma/PrismaUserRepo'
+import { generateNewAvatarFilename, getUploadsFolderDir } from '@utils/filesUtil'
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { randomUUID } from 'node:crypto'
+import { unlink } from 'node:fs/promises'
 import { resolve } from 'node:path'
 const fs = require('node:fs')
 const util = require('node:util')
@@ -9,11 +12,19 @@ const pump = util.promisify(pipeline)
 const updateUserAvatarController = async (req: FastifyRequest, rep: FastifyReply) => {
   const { file, filename } = await req.file()
 
-  const fileExt = filename.split('.').pop()
-  const newFilename = `${randomUUID()}-${new Date().toJSON()}-avatar.${fileExt}`
-  const fileDirPath = resolve(__dirname, '..', '..', '..', '..', 'uploads', newFilename)
+  const newFilename = generateNewAvatarFilename({
+    filename,
+    userid: req.user.id
+  })
+  const filePath = resolve(getUploadsFolderDir(), newFilename)
 
-  await pump(file, fs.createWriteStream(fileDirPath))
+  await pump(file, fs.createWriteStream(filePath))
+
+  const avatarUri = `${req.protocol}://${req.hostname}/uploads/${newFilename}`
+  await new PrismaUserRepo().update(req.user.id, { avatar: avatarUri })
+
+  if(env.NODE_ENV == 'PRD')
+    await unlink(filePath)
 
   rep.statusCode = 200
   rep.send()
