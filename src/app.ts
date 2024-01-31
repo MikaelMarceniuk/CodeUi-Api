@@ -1,7 +1,6 @@
 import env from '@config/env'
 import discordRouter from '@controllers/discord/router'
 import userRouter from '@controllers/user/router'
-import userFavoriteRouter from '@controllers/userFavorite/router'
 import cors from '@fastify/cors'
 import jwt from '@fastify/jwt'
 import Discord from '@libs/discord'
@@ -43,7 +42,6 @@ class App {
 
     this.app.register(discordRouter, { prefix: '/api/discord' })
     this.app.register(userRouter, { prefix: '/api/user' })
-    this.app.register(userFavoriteRouter, { prefix: '/api/user-favorite' })
   }
 }
 
