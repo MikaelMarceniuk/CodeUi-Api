@@ -1,60 +1,40 @@
-import env from '@config/env'
-import { Storage } from '@google-cloud/storage'
 import PrismaUserRepo from '@repository/prisma/PrismaUserRepo'
+import UpdateUserAvatarUseCase from '@useCases/userUseCase/updateUserAvatarUseCase'
 import { generateNewAvatarFilename, getUploadsFolderDir } from '@utils/filesUtil'
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { unlink } from 'node:fs/promises'
-import { resolve } from 'node:path'
-import stream from 'stream'
+import path from 'path'
 const fs = require('node:fs')
 const util = require('node:util')
 const { pipeline } = require('node:stream')
 const pump = util.promisify(pipeline)
 
 const updateUserAvatarController = async (req: FastifyRequest, rep: FastifyReply) => {
-  const { file, filename } = await req.file()
-
-  const newFilename = generateNewAvatarFilename({
-    filename,
-    userid: req.user.id
-  })
-  const filePath = resolve(getUploadsFolderDir(), newFilename)
-  let avatarUri
-
-  await pump(file, fs.createWriteStream(filePath))
-
-  if(env.NODE_ENV == 'DEV')
-    avatarUri = `${req.protocol}://${req.hostname}/uploads/${newFilename}`
-
-  if(env.NODE_ENV == 'PRD') {
-    const storage = new Storage({
-      keyFile: resolve(__dirname, '..', '..', '..', '..', 'keys', 'codeui--storage.json')
-    })
-
-    // Get a reference to the bucket
-    const bucket = storage.bucket('codeui-api');
-
-    // Create a reference to a file object
-    const bFile = bucket.file(newFilename);
-
-    // Create a pass through stream from a string
-    const passthroughStream = new stream.PassThrough();
-    passthroughStream.write(await fs.readFileSync(filePath));
-    passthroughStream.end();
-
-    const uploadFileToBucket = () => {
-      passthroughStream.pipe(bFile.createWriteStream())
-        .on('finish', () => {
-          console.log('Upload is finished')
-        });
+  let avatarFile = await req.file({
+    limits: {
+      files: 1
     }
-    uploadFileToBucket()
-
-    avatarUri = `https://storage.cloud.google.com/codeui-api/${newFilename}`
-    await unlink(filePath)
+  })
+  if(!avatarFile) {
+    rep.statusCode = 401
+    rep.send({ message: 'Avatar file missing.'})
   }
 
-  await new PrismaUserRepo().update(req.user.id, { avatar: avatarUri })
+  const newFilename = generateNewAvatarFilename({
+    userid: req.user.id,
+    filename: avatarFile?.filename as string
+  })
+  const filePath = path.resolve(getUploadsFolderDir(), newFilename)
+
+  await pump(avatarFile?.file, fs.createWriteStream(filePath))
+
+  await new UpdateUserAvatarUseCase(new PrismaUserRepo())
+    .execute({
+      userId: req.user.id,
+      file: {
+        name: newFilename,
+        path: filePath
+      }
+    })
 
   rep.statusCode = 200
   rep.send()
