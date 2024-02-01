@@ -1,4 +1,5 @@
 import env from '@config/env'
+import currencyRouter from '@controllers/currency/router'
 import discordRouter from '@controllers/discord/router'
 import userRouter from '@controllers/user/router'
 import cors from '@fastify/cors'
@@ -44,6 +45,7 @@ class App {
 
     this.app.register(discordRouter, { prefix: '/api/discord' })
     this.app.register(userRouter, { prefix: '/api/user' })
+    this.app.register(currencyRouter, { prefix: '/api/currency' })
   }
 }
 
