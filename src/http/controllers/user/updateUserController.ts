@@ -7,7 +7,7 @@ const updateUserController = async (req: FastifyRequest, rep: FastifyReply) => {
   const userSchema = z.object({
     username: z.string().optional(),
     contact: z.string().optional(),
-    preferred_currency: z.string().optional()
+    preferred_currency: z.enum(['BRL', 'USD', 'EUR']).optional()
   })
 
   const parsedBody = userSchema.parse(req.body)
