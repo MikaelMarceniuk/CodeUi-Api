@@ -1,6 +1,7 @@
 import { UserFavorite } from "@prisma/client"
 import IUserFavoriteRepository from "@repository/IUserFavoriteRepository"
 import IUserRepository from "@repository/IUserRepository"
+import UserFavoriteLimitError from "@useCases/errors/UserFavoriteLimitError"
 import UserNotFoundError from "@useCases/errors/UserNotFoundError"
 
 interface ICreateUserFavoriteRequest {
@@ -26,7 +27,7 @@ class CreateUserFavoriteUseCase {
       throw new UserNotFoundError()
 
     if(dbUser.favorites.length == 3)
-      throw new Error('User can only have 3 favorites.')
+      throw new UserFavoriteLimitError()
 
     const dbUserFavorite = await this.userFavoriteRepo.save({
       user_id: userId,

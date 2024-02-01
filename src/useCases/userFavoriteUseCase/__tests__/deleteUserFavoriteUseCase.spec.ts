@@ -2,6 +2,8 @@ import InMemoryPostgresql from '@libs/inMemoryPostgres'
 import { User } from '@prisma/client'
 import InMemoryUserFavoriteRepo from '@repository/inMemory/inMemoryUserFavoriteRepo'
 import InMemoryUserRepo from '@repository/inMemory/inMemoryUserRepo'
+import NoPermitionError from '@useCases/errors/NoPermitionError'
+import UserFavoriteNotFoundError from '@useCases/errors/UserFavoriteNotFoundError'
 import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import DeleteUserFavoriteUseCase from '../deleteUserFavoriteUseCase'
 
@@ -48,7 +50,7 @@ describe('CreateUserFavoriteUseCase', () => {
   it('Should throw Error "Resource not found."', async () => {
     await expect(
       sut.execute({ userId: dbUser.id, userFavoriteId: 1 })
-    ).rejects.toBeInstanceOf(Error)
+    ).rejects.toBeInstanceOf(UserFavoriteNotFoundError)
   })
 
   it('Should throw Error "Not enough permission."', async () => {
@@ -59,6 +61,6 @@ describe('CreateUserFavoriteUseCase', () => {
 
     await expect(
       sut.execute({ userId: '1', userFavoriteId: userFavorite.id })
-    ).rejects.toBeInstanceOf(Error)
+    ).rejects.toBeInstanceOf(NoPermitionError)
   })
 })
