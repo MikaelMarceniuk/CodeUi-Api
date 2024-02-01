@@ -50,7 +50,19 @@ model Project {
   name       String
   created_at DateTime @default(now())
 
-  user User @relation(fields: [owner_id], references: [id])
+  user           User             @relation(fields: [owner_id], references: [id])
+  ProjectService ProjectService[]
+}
+
+model ProjectService {
+  id         String   @id @default(uuid())
+  project_id String
+  name       String
+  valor      String
+  start_at   DateTime
+  end_date   DateTime
+
+  project Project @relation(fields: [project_id], references: [id])
 }
 
 model PortfolioContact {
