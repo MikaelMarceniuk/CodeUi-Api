@@ -1,6 +1,6 @@
 class UserNotFoundError extends Error {
   constructor() {
-    super('User not found.')
+    super('Not found.')
   }
 }
 
