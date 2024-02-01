@@ -1,4 +1,4 @@
-import { User } from '@prisma/client'
+import { Currency, User } from '@prisma/client'
 import IUserRepository from '@repository/IUserRepository'
 import UserNotFoundError from '@useCases/errors/UserNotFoundError'
 
@@ -7,7 +7,7 @@ interface IUpdateUserRequest {
   data: {
     username?: string
     contact?: string
-    preferred_currency?: string
+    preferred_currency?: Currency
   }
 }
 
