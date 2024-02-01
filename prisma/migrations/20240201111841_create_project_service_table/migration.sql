@@ -4,7 +4,7 @@ CREATE TABLE "ProjectService" (
     "project_id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "valor" TEXT NOT NULL,
-    "start_at" TIMESTAMP(3) NOT NULL,
+    "start_date" TIMESTAMP(3) NOT NULL,
     "end_date" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "ProjectService_pkey" PRIMARY KEY ("id")
