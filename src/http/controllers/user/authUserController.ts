@@ -22,13 +22,30 @@ const authUserController = async (req: FastifyRequest, rep: FastifyReply) => {
       {
         sign: {
           sub: user.id,
-          expiresIn: '10m',
+          expiresIn: '2m',
         }
       }
     )
 
+    const refreshToken = await rep.jwtSign(
+      { id: user.id },
+      {
+        sign: {
+          sub: user.id,
+          expiresIn: "7d",
+        },
+      }
+    )
+
     rep.statusCode = 200
-    rep.send({
+    rep
+    .setCookie("refreshToken", refreshToken, {
+      path: "/",
+      secure: true,
+      sameSite: true,
+      httpOnly: true,
+    })
+    .send({
       accessToken,
       user: {
         id: user.id,

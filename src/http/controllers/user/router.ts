@@ -1,10 +1,11 @@
 import { FastifyInstance } from 'fastify'
 import jwtValidator from 'src/http/middlewares/jwtValidator'
-import authUserController from './authUser'
+import authUserController from './authUserController'
 import createUserController from './createUser'
 import createUserFavoriteController from './createUserFavoriteController'
 import deleteUserFavoriteController from './deleteUserFavoriteController'
 import getUserInfoController from './getUserInfo'
+import refreshTokenController from './refreshtokenController'
 import updateUserAvatarController from './updateUserAvatarController'
 import updateUserController from './updateUserController'
 import updateUserPlanController from './updateUserPlanController'
@@ -12,6 +13,7 @@ import updateUserPlanController from './updateUserPlanController'
 const userRouter = async (app: FastifyInstance) => {
   app.post('/', createUserController)
   app.post('/session', authUserController)
+  app.post('/session/refresh', refreshTokenController)
 
   app.get('/', { onRequest: [jwtValidator] }, getUserInfoController)
   app.put('/', { onRequest: [jwtValidator] }, updateUserController)
