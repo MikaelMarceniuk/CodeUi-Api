@@ -5,8 +5,8 @@ import createUserController from './createUser'
 import createUserFavoriteController from './createUserFavoriteController'
 import deleteUserFavoriteController from './deleteUserFavoriteController'
 import getUserInfoController from './getUserInfo'
-import updateUserController from './updateUser'
 import updateUserAvatarController from './updateUserAvatarController'
+import updateUserController from './updateUserController'
 import updateUserPlanController from './updateUserPlanController'
 
 const userRouter = async (app: FastifyInstance) => {
