@@ -2,7 +2,7 @@
 
 ## Descricao
 
-Os testes unitarios sao feitos pela biblioteca Vitest, e os testes estao localizados na pasta **src/useCases/\_\_tests\_\_**
+Os testes unitarios tem o foco de testar toda a regra de negocio da aplicacao, os testes estao localizados no diretorio **src/useCases/[userUseCase, userFavoriteUseCase]/\_\_tests\_\_**.
 
 ## Instalacao
 
@@ -16,14 +16,14 @@ npm install
 
 Existem 2 comandos para executar testes unitarios
 
+- Para rodar apenas 1 vez os testes
+
 ```bash
 npm run test
 ```
 
-Vai rodar apenas 1 vez os testes unitarios
+- Para rodar a cada alteracao dentro dos arquivos de testes unitarios
 
 ```bash
 npm run test:watch
 ```
-
-Vai rodar a cada alteracao dentro dos arquivos de testes unitarios
