@@ -22,34 +22,44 @@ enum Currency {
 }
 
 model User {
-  id String @id @default(uuid())
-  username String
-  email String @unique
-  password_hash String
-  contact String?
-  avatar String?
+  id                 String   @id @default(uuid())
+  username           String
+  email              String   @unique
+  password_hash      String
+  contact            String?
+  avatar             String?
   preferred_currency Currency @default(BRL)
-  plan Plans @default(FREE)
-  created_at DateTime @default(now())
+  plan               Plans    @default(FREE)
+  created_at         DateTime @default(now())
 
   favorites UserFavorite[]
+  Project   Project[]
 }
 
 model UserFavorite {
-  id Int @id @default(autoincrement())
+  id      Int    @id @default(autoincrement())
   user_id String
-  name String
+  name    String
 
   user User @relation(fields: [user_id], references: [id])
 }
 
+model Project {
+  id         String   @id @default(uuid())
+  owner_id   String
+  name       String
+  created_at DateTime @default(now())
+
+  user User @relation(fields: [owner_id], references: [id])
+}
+
 model PortfolioContact {
-  id Int @id @default(autoincrement())
-  name String
-  email String
-  mobile_number String
-  hear_about_us String
-  about_project String
+  id             Int      @id @default(autoincrement())
+  name           String
+  email          String
+  mobile_number  String
+  hear_about_us  String
+  about_project  String
   way_of_contact String
-  create_at DateTime @default(now())
+  create_at      DateTime @default(now())
 }
