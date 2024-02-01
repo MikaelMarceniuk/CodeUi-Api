@@ -15,6 +15,12 @@ enum Plans {
   PRO
 }
 
+enum Currency {
+  BRL
+  USD
+  EUR
+}
+
 model User {
   id String @id @default(uuid())
   username String
@@ -22,7 +28,7 @@ model User {
   password_hash String
   contact String?
   avatar String?
-  preferred_currency String?
+  preferred_currency Currency @default(BRL)
   plan Plans @default(FREE)
   created_at DateTime @default(now())
 
