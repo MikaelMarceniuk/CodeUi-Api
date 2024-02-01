@@ -44,12 +44,35 @@ Body: {
 
 
 ```
-{
+Cookies: refreshToken
+Body: {
   accessToken: string,
   user: {
     id: string,
     email: string
   }
+}
+```
+
+Status Code: 200 - OK
+
+### Refresh Token
+
+Cria um novo JWT para usuario
+
+**Endpoint**
+
+```
+POST /api/user/session/refresh
+```
+
+**Resposta de Sucesso**
+
+
+```
+Cookies: refreshToken
+Body: {
+  token: string,
 }
 ```
 
@@ -122,6 +145,24 @@ Body {
 
 Status Code: 204 - No Content
 
+### Atualiza Avatar do Usuario
+
+Atualiza apenas o avatar do usuario autenticado
+
+**Endpoint**
+
+```
+PATCH /api/user/avatar
+Header: 'Authorization': 'Bearer <token>'
+multipart form {
+  avatar: file
+}
+```
+
+**Resposta de Sucesso**
+
+Status Code: 200
+
 ## User Favorites
 
 ### Criar novo favorito
@@ -131,7 +172,7 @@ Cria um novo favorito para usuario autenticado, o usuario pode ter no maximo 3
 **Endpoint**
 
 ```
-POST /api/user-favorites
+POST /api/user/favorites
 Header: 'Authorization': 'Bearer <token>'
 Body {
   name: string
@@ -156,3 +197,24 @@ Header: 'Authorization': 'Bearer <token>'
 **Resposta de Sucesso**
 
 Status Code: 204 - No Content
+
+## Currency
+
+### Pegar currencies
+
+Pega todas as moedas disponiveis
+
+**Endpoint**
+
+```
+GET /api/currency
+```
+
+**Resposta de Sucesso**
+
+```
+Status Code: 200
+body {
+  currencies: string[]
+}
+```

@@ -35,6 +35,12 @@ Copie e cole o arquivo **.env.example** e preencha as variaveis. Abaixo esta uma
 
 - JWT_SECRET: String para gerar o token jwt
 
+- GOOGLE_PROJECT_ID: Codigo do projeto da Google Cloud
+
+- GOOGLE_STORAGE_EMAIL: Email do user IAM da Google Cloud
+
+- GOOGLE_STORAGE_KEY: PrivateKey do user IAM da Google Cloud
+
 ## Executando o projeto
 
 Apos todos os criterios forem preenchidos, para rodar em desenvolvimento e necessario usar o seguinte comando:

@@ -1,4 +1,6 @@
 import IUserFavoriteRepository from "@repository/IUserFavoriteRepository"
+import NoPermitionError from "@useCases/errors/NoPermitionError"
+import UserFavoriteNotFoundError from "@useCases/errors/UserFavoriteNotFoundError"
 
 interface IDeleteUserFavoriteRequest {
   userId: string
@@ -18,10 +20,10 @@ class DeleteUserFavoriteUseCase {
   ): Promise<void> {
     const userFavorites = await this.userFavoriteRepo.findById(userFavoriteId)
     if(!userFavorites)
-      throw new Error('Resource not found.')
+      throw new UserFavoriteNotFoundError()
 
     if(userFavorites.user_id != userId)
-      throw new Error('Not enough permission.')
+      throw new NoPermitionError()
 
     await this.userFavoriteRepo.delete(userFavoriteId)
   }

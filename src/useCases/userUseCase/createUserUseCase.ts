@@ -1,5 +1,6 @@
 import { User } from '@prisma/client'
 import IUserRepository from '@repository/IUserRepository'
+import UserAlreadyExistsError from '@useCases/errors/UserAlreadyExists'
 import hashUserPassword from '@utils/hashUserPassword'
 
 interface ICreateUserRequest {
@@ -17,7 +18,7 @@ class CreateUserUseCase {
   async execute(data: ICreateUserRequest): Promise<ICreateUserResponse> {
     const dbUser = await this.userRepo.findByEmail(data.email)
     if (dbUser)
-      throw new Error('User with email')
+      throw new UserAlreadyExistsError()
 
     const newDbUser = await this.userRepo.save({
       username: data.email.split('@')[0],

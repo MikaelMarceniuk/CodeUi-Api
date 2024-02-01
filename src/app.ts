@@ -18,7 +18,9 @@ class App {
     await this.loadMiddlewares()
     await this.loadRoutes()
 
-    await new Discord().init()
+    if(env.NODE_ENV != 'test')
+      await new Discord().init()
+    
     await new Postgresql().init()
   }
 

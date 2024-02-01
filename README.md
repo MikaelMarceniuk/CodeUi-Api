@@ -6,6 +6,7 @@ Bem-vindo à documentação da API da CodeUi. Esta API fornece o [Portfolio](htt
 ## Paginas
   - [Instalacao](/docs/installation.md)
   - [Testes unitarios](/docs/unitTesting.md)
+  - [Testes e2e](/docs/testE2E.md.md)
   - [Endpoints](/docs/endpoints.md)
 
 # Features
@@ -14,5 +15,6 @@ Bem-vindo à documentação da API da CodeUi. Esta API fornece o [Portfolio](htt
 |----------|--------|
 | CRUD Usuario | Online |
 | Notificacao Discord | Online |
+| Integracao Google Storage | Online |
 | Integracao Google Analytics | A ser desenvolvido |
 | Pagamento/Inscricoes | A ser desenvolvido

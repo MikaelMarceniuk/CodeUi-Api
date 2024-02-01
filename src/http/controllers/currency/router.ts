@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import GetAllCurrencyController from "./GetAllCurrencyController";
+import GetAllCurrencyController from "./getAllCurrencyController";
 
 const currencyRouter = async (app: FastifyInstance) => {
   app.get('/', GetAllCurrencyController)

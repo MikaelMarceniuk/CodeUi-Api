@@ -2,6 +2,7 @@ import InMemoryPostgresql from '@libs/inMemoryPostgres'
 import { User } from '@prisma/client'
 import InMemoryUserFavoriteRepo from '@repository/inMemory/inMemoryUserFavoriteRepo'
 import InMemoryUserRepo from '@repository/inMemory/inMemoryUserRepo'
+import UserFavoriteLimitError from '@useCases/errors/UserFavoriteLimitError'
 import UserNotFoundError from '@useCases/errors/UserNotFoundError'
 import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import CreateUserFavoriteUseCase from '../createUserFavoriteUseCase'
@@ -72,6 +73,6 @@ describe('CreateUserFavoriteUseCase', () => {
     await expect(sut.execute({
       userId: dbUser.id,
       name: 'Servicos'
-    })).rejects.toBeInstanceOf(Error)
+    })).rejects.toBeInstanceOf(UserFavoriteLimitError)
   })
 })
