@@ -2,6 +2,7 @@ import env from '@config/env'
 import currencyRouter from '@controllers/currency/router'
 import discordRouter from '@controllers/discord/router'
 import userRouter from '@controllers/user/router'
+import fastifyCookie from "@fastify/cookie"
 import cors from '@fastify/cors'
 import jwt from '@fastify/jwt'
 import fastifyMultipart from '@fastify/multipart'
@@ -36,8 +37,12 @@ class App {
           : ['https://codeui.com.br', 'https://dashboard-codeui.vercel.app'],
     })
 
-    await this.app.register(jwt, { secret: env.JWT_SECRET })
+    await this.app.register(jwt, {
+      secret: env.JWT_SECRET,
+      cookie: { cookieName: "refreshToken", signed: false }
+    })
     await this.app.register(fastifyMultipart)
+    await this.app.register(fastifyCookie)
   }
 
   async loadRoutes() {
