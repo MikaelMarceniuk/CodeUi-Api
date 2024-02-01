@@ -17,7 +17,7 @@ const deleteUserFavoriteController = async (req: FastifyRequest, rep: FastifyRep
     userFavoriteId: id
   })
 
-  rep.statusCode = 200
+  rep.statusCode = 204
   rep.send()
 }
 
