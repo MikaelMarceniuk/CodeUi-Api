@@ -4,6 +4,13 @@ import IProjectRepository from "@repository/IProjectRepository";
 import { randomUUID } from "node:crypto";
 
 class InMemoryProjectRepo implements IProjectRepository {
+  async findById(id: string) {
+    const dbProject = await InMemoryPostgresql.getInstance().public.one(
+      `select * from "Project" where "Project".id = '${id}'`
+    )
+    return dbProject || null
+  }
+
   async getAllByOwnerId(ownerId: string) {
     const dbProjects = await InMemoryPostgresql.getInstance().public.many(
       `select * from "Project" where "Project".owner_id = '${ownerId}'`
