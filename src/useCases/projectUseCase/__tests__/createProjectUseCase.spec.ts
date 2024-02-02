@@ -6,13 +6,13 @@ import InMemoryUserRepo from '@repository/inMemory/inMemoryUserRepo'
 import ResourceAlreadyExistsError from '@useCases/errors/ResourceAlreadyExistsError'
 import UserNotFoundError from '@useCases/errors/UserNotFoundError'
 import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
-import CreateProjectUseCaseUseCase from '../createProjectUseCase'
+import CreateProjectUseCase from '../createProjectUseCase'
 
 let inMemoryPostgresql: InMemoryPostgresql
 let inMemoryUserRepo: InMemoryUserRepo
 let inMemoryProjectRepo: InMemoryProjectRepo
 let inMemoryProjectServiceRepo: InMemoryProjectServiceRepo
-let sut: CreateProjectUseCaseUseCase
+let sut: CreateProjectUseCase
 
 const defaultUser = {
   username: 'John Doe',
@@ -36,7 +36,7 @@ describe('CreateUserFavoriteUseCase', () => {
     await inMemoryPostgresql.rollback()
     dbUser = await inMemoryUserRepo.save(defaultUser)
 
-    sut = new CreateProjectUseCaseUseCase(inMemoryUserRepo, inMemoryProjectRepo)
+    sut = new CreateProjectUseCase(inMemoryUserRepo, inMemoryProjectRepo)
   })
 
   it('Should create project', async () => {

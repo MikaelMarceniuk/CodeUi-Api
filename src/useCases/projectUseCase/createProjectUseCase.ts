@@ -13,7 +13,7 @@ interface ICreateProjectUseCaseResponse {
   project: Project
 }
 
-class CreateProjectUseCaseUseCase {
+class CreateProjectUseCase {
   constructor(
     private userRepo: IUserRepository,
     private projectRepo: IProjectRepository
@@ -41,4 +41,4 @@ class CreateProjectUseCaseUseCase {
   }
 }
 
-export default CreateProjectUseCaseUseCase
+export default CreateProjectUseCase
