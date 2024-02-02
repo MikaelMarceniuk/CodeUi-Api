@@ -13,8 +13,11 @@ Bem-vindo à documentação da API da CodeUi. Esta API fornece o [Portfolio](htt
 
 | Features | Status |
 |----------|--------|
-| CRUD Usuario | Online |
+| Unit Test | Online |
+| e2e Test | Online |
 | Notificacao Discord | Online |
 | Integracao Google Storage | Online |
-| Integracao Google Analytics | A ser desenvolvido |
-| Pagamento/Inscricoes | A ser desenvolvido
+| Integracao Google Analytics | Em desenvolvimento |
+| Pagamento/Inscricoes | A ser desenvolvido |
+| Notifications | A ser desenvolvido |
+| RabbitMQ | A ser desenvolvido |
