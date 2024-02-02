@@ -1,23 +1,23 @@
 import InMemoryPostgresql from "@libs/inMemoryPostgres";
-import { Prisma } from "@prisma/client";
+import { Prisma, ProjectService } from "@prisma/client";
 import IProjectServiceRepository from "@repository/IProjectServiceRepository";
 import { randomUUID } from "node:crypto";
 
 class InMemoryProjectServiceRepo implements IProjectServiceRepository {
-  async findById(id: string) {
+  async findById(id: string): Promise<ProjectService | null> {
     const dbProjects = await InMemoryPostgresql.getInstance().public.one(
       `select * from "ProjectService" where "ProjectService".id = '${id}'`
     )
     return dbProjects || null
   }
 
-  async getAllByProjectId(projectId: string) {
+  async getAllByProjectId(projectId: string): Promise<ProjectService[]> {
     return await InMemoryPostgresql.getInstance().public.many(
       `select * from "ProjectService" where "ProjectService".project_id = '${projectId}'`
     )
   }
 
-  async save(data: Prisma.ProjectServiceUncheckedCreateInput) {
+  async save(data: Prisma.ProjectServiceUncheckedCreateInput): Promise<ProjectService> {
     const uuid = randomUUID()
 
     await InMemoryPostgresql.getInstance().public.query(

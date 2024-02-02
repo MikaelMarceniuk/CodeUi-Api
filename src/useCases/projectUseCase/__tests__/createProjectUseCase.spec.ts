@@ -1,6 +1,7 @@
 import InMemoryPostgresql from '@libs/inMemoryPostgres'
 import { User } from '@prisma/client'
 import InMemoryProjectRepo from '@repository/inMemory/inMemoryProjectRepo'
+import InMemoryProjectServiceRepo from '@repository/inMemory/inMemoryProjectServiceRepo'
 import InMemoryUserRepo from '@repository/inMemory/inMemoryUserRepo'
 import ResourceAlreadyExistsError from '@useCases/errors/ResourceAlreadyExistsError'
 import UserNotFoundError from '@useCases/errors/UserNotFoundError'
@@ -10,6 +11,7 @@ import CreateProjectUseCaseUseCase from '../createProjectUseCase'
 let inMemoryPostgresql: InMemoryPostgresql
 let inMemoryUserRepo: InMemoryUserRepo
 let inMemoryProjectRepo: InMemoryProjectRepo
+let inMemoryProjectServiceRepo: InMemoryProjectServiceRepo
 let sut: CreateProjectUseCaseUseCase
 
 const defaultUser = {
@@ -27,6 +29,7 @@ describe('CreateUserFavoriteUseCase', () => {
 
     inMemoryUserRepo = new InMemoryUserRepo()
     inMemoryProjectRepo = new InMemoryProjectRepo()
+    inMemoryProjectServiceRepo = new InMemoryProjectServiceRepo()
   })
 
   beforeEach(async () => {
@@ -45,6 +48,18 @@ describe('CreateUserFavoriteUseCase', () => {
     expect(project.id).toEqual(expect.any(String))
     expect(project.owner_id).toEqual(dbUser.id)
     expect(project.name).toEqual('Portfolio')
+  })
+
+  it('Should create project with Google Analytics Service', async () => {
+    const { project } = await sut.execute({
+      userId: dbUser.id,
+      name: 'Portfolio'
+    })
+
+    const services = await inMemoryProjectServiceRepo.getAllByProjectId(project.id)
+
+    expect(services.length).toEqual(1)
+    expect(services[0].name).toEqual('Google Analytics')
   })
 
   it('Should throw UserNotFoundError', async () => {
