@@ -2,7 +2,7 @@ import InMemoryPostgresql from "@libs/inMemoryPostgres";
 import { Prisma, User } from "@prisma/client";
 import IUserRepository from "@repository/IUserRepository";
 import { randomUUID } from "node:crypto";
-import UserWithFavorites from "src/@types/userWithFavorites";
+import AllUserInfo from "src/@types/AllUserInfo";
 
 class InMemoryUserRepo implements IUserRepository {
   async findById(id: string): Promise<User | null> {
@@ -25,15 +25,18 @@ class InMemoryUserRepo implements IUserRepository {
     return await InMemoryPostgresql.getInstance().public.one(`select * from "User" where "User".id = '${uuid}'`)
   }
 
-  async getAllInfoById(id: string) {
+  async getAllInfoById(id: string): Promise<AllUserInfo | null> {
     const dbUser = await this.findById(id)
     if(!dbUser)
       return null
 
-    const dbUserWithFavorites: UserWithFavorites = {
+    const dbUserWithFavorites: AllUserInfo = {
       ...dbUser,
       favorites: await InMemoryPostgresql.getInstance().public.many(
         `select * from "UserFavorite" where "UserFavorite".user_id = '${dbUser.id}'`
+      ),
+      projects: await InMemoryPostgresql.getInstance().public.many(
+        `select * from "Project" where "Project".owner_id = '${dbUser.id}'`
       )
     }
 

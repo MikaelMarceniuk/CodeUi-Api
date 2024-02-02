@@ -1,13 +1,13 @@
-import { User } from '@prisma/client'
 import IUserRepository from '@repository/IUserRepository'
 import UserNotFoundError from '@useCases/errors/UserNotFoundError'
+import AllUserInfo from 'src/@types/AllUserInfo'
 
 interface IGetUserInfoRequest {
   userId: string
 }
 
 interface IGetUserInfoResponse {
-  user: User
+  user: AllUserInfo
 }
 
 class GetUserInfoUseCase {
