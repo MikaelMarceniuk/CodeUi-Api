@@ -1,6 +1,7 @@
 import Postgresql from "@libs/postgresql";
 import { Prisma } from "@prisma/client";
 import IUserRepository from "@repository/IUserRepository";
+import AllUserInfo from "src/@types/AllUserInfo";
 
 class PrismaUserRepo implements IUserRepository {
 	async findById(id: string) {
@@ -11,11 +12,12 @@ class PrismaUserRepo implements IUserRepository {
 		return await Postgresql.getInstance().user.findUnique({ where: { email } })
 	}
 
-	async getAllInfoById(id: string): Promise<Prisma.UserGetPayload<{ include: { favorites: true } }> | null> {
+	async getAllInfoById(id: string): Promise<AllUserInfo | null> {
 		return await Postgresql.getInstance().user.findUnique({
 			where: { id },
 			include: {
-				favorites: true
+				favorites: true,
+				projects: true
 			}
 		})
 	}

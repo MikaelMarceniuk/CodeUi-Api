@@ -32,12 +32,14 @@ describe('GetUserInfoUseCase', () => {
     sut = new GetUserInfoUseCase(inMemoryUserRepo)
   })
 
-  it('Should update user', async () => {
+  it('Should return allUserInfo', async () => {
     const { user } = await sut.execute({
       userId: dbUser.id
     })
 
     expect(user.id).toEqual(dbUser.id)
+    expect(user.favorites).toEqual(expect.any(Array))
+    expect(user.projects).toEqual(expect.any(Array))
   })
 
   it('Should throw UserNotFoundError', async () => {
