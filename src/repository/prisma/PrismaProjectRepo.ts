@@ -25,8 +25,8 @@ class PrismaProjectRepo implements IProjectRepository {
           create: {
             name: 'Google Analytics',
             valor: '10',
-            start_date: moment().format('YYYY-MM-DD'),
-            end_date: moment('9999-01-01').format('YYYY-MM-DD')
+            start_date: moment().startOf('day').toDate().toJSON(),
+            end_date: moment('9999-01-01').startOf('day').toDate().toJSON()
           }
         }
       }
