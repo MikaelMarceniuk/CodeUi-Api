@@ -53,7 +53,7 @@ class InMemoryProjectRepo implements IProjectRepository {
 
   async update(data: Prisma.ProjectUpdateInput): Promise<Project> {
     await InMemoryPostgresql.getInstance().public.query(
-      `update "Project" set "name" = '${data.name}' where "Project".id = '${data.id}'`
+      `update "Project" set "name" = '${data.name}', analytics_code = '${data.analytics_code}' where "Project".id = '${data.id}'`
     )
 
     return await this.findById(data.id as string) as Project

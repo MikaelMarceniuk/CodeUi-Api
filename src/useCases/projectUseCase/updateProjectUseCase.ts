@@ -6,7 +6,8 @@ interface IUpdateProjectUseCaseRequest {
   userId: string
   projectId: string
   data: {
-    name: string
+    name?: string
+    analyticsCode?: string
   }
 }
 
@@ -23,13 +24,15 @@ class UpdateProjectUseCase {
     { userId, projectId, data }: IUpdateProjectUseCaseRequest
   ): Promise<IUpdateProjectUseCaseResponse> {
     const dbUserProjects = await this.projectRepo.getAllByOwnerId(userId)
-    if(!dbUserProjects.find(p => p.id == projectId))
+    const dbUserProj = dbUserProjects.find(p => p.id == projectId)
+    if(!dbUserProj)
       throw new NoPermitionError()
 
     return {
       project: await this.projectRepo.update({
         id: projectId,
-        name: data.name
+        name: data.name || dbUserProj.name,
+        analytics_code: data.analyticsCode || dbUserProj.analytics_code,
       })
     }
   }

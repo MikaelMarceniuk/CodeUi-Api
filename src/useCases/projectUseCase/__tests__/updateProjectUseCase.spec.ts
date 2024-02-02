@@ -47,10 +47,14 @@ describe('UpdateProjectUseCase', () => {
     const { project } = await sut.execute({
       userId: dbUser.id,
       projectId: dbProject.id,
-      data: { name: 'Blog' }
+      data: {
+        name: 'Blog',
+        analyticsCode: '22422'
+      }
     })
 
     expect(project.name).toEqual('Blog')
+    expect(project.analytics_code).toEqual('22422')
   })
 
   it('Should throw NoPermitionError', async () => {
