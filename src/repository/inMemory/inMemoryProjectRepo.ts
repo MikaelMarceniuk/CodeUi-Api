@@ -1,8 +1,9 @@
 import InMemoryPostgresql from "@libs/inMemoryPostgres";
-import { Prisma, Project } from "@prisma/client";
+import { Prisma, Project, ProjectService } from "@prisma/client";
 import IProjectRepository from "@repository/IProjectRepository";
 import moment from "moment";
 import { randomUUID } from "node:crypto";
+import AllProjectInfo from "src/@types/AllProjectInfo";
 
 class InMemoryProjectRepo implements IProjectRepository {
   async findById(id: string): Promise<Project | null> {
@@ -10,6 +11,17 @@ class InMemoryProjectRepo implements IProjectRepository {
       `select * from "Project" where "Project".id = '${id}'`
     )
     return dbProject || null
+  }
+
+  async getAllInfoById(id: string): Promise<AllProjectInfo> {
+    const dbProject = await this.findById(id) as Project
+
+    return {
+      ...dbProject,
+      services: await InMemoryPostgresql.getInstance().public.many(
+        `select * from "ProjectService" where "ProjectService".project_id = '${dbProject?.id}'`
+      ) as ProjectService[]
+    }
   }
 
   async getAllByOwnerId(ownerId: string): Promise<Project[]> {
@@ -37,6 +49,20 @@ class InMemoryProjectRepo implements IProjectRepository {
     )
 
     return project
+  }
+
+  async update(data: Prisma.ProjectUpdateInput): Promise<Project> {
+    await InMemoryPostgresql.getInstance().public.query(
+      `update "Project" set "name" = '${data.name}' where "Project".id = '${data.id}'`
+    )
+
+    return await this.findById(data.id as string) as Project
+  }
+
+  async softDelete(id: string): Promise<void> {
+    await InMemoryPostgresql.getInstance().public.query(
+      `update "Project" set is_deleted = true, deleted_at = '${new Date().toJSON()}' where "Project".id = '${id}'`
+    )
   }
 }
 
