@@ -48,7 +48,8 @@ describe("GetUserInfoController", () => {
       preferred_currency: 'BRL',
       plan: 'FREE',
       created_at: expect.any(String),
-      favorites: expect.any(Array)
+      favorites: expect.any(Array),
+      projects: expect.any(Array),
     })
   })
 })
