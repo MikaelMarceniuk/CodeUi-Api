@@ -45,14 +45,15 @@ model UserFavorite {
 }
 
 model Project {
-  id         String   @id @default(uuid())
-  owner_id   String
-  name       String
-  created_at DateTime @default(now())
-  is_deleted Boolean @default(false)
-  deleted_at DateTime?
+  id             String    @id @default(uuid())
+  owner_id       String
+  name           String
+  analytics_code String?
+  created_at     DateTime  @default(now())
+  is_deleted     Boolean   @default(false)
+  deleted_at     DateTime?
 
-  user           User             @relation(fields: [owner_id], references: [id])
+  user     User             @relation(fields: [owner_id], references: [id])
   services ProjectService[]
 }
 
