@@ -49,9 +49,11 @@ model Project {
   owner_id   String
   name       String
   created_at DateTime @default(now())
+  is_deleted Boolean @default(false)
+  deleted_at DateTime?
 
   user           User             @relation(fields: [owner_id], references: [id])
-  ProjectService ProjectService[]
+  services ProjectService[]
 }
 
 model ProjectService {
@@ -62,7 +64,7 @@ model ProjectService {
   start_date DateTime
   end_date   DateTime
 
-  project Project @relation(fields: [project_id], references: [id])
+  project Project @relation(fields: [project_id], references: [id], onDelete: Cascade)
 }
 
 model PortfolioContact {

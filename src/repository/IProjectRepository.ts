@@ -8,6 +8,7 @@ interface IProjectRepository {
   save(data: Prisma.ProjectUncheckedCreateInput): Promise<Project>
   saveWithGoogleAnalyticsService(data: Prisma.ProjectUncheckedCreateInput): Promise<Project>
   update(data: Prisma.ProjectUpdateInput): Promise<Project>
+  softDelete(id: string): Promise<void>
 }
 
 export default IProjectRepository
