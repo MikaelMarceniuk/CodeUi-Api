@@ -30,7 +30,7 @@ class CreateProjectUseCaseUseCase {
     if(dbUserProjects.find(p => p.name == name))
       throw new ResourceAlreadyExistsError()
 
-    const newProject = await this.projectRepo.save({
+    const newProject = await this.projectRepo.saveWithGoogleAnalyticsService({
       name,
       owner_id: userId
     })
