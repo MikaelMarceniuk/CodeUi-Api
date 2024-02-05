@@ -22,8 +22,8 @@ const authUserController = async (req: FastifyRequest, rep: FastifyReply) => {
       {
         sign: {
           sub: user.id,
-          expiresIn: '2m',
-        }
+          expiresIn: '7d',
+        },
       }
     )
 
@@ -32,26 +32,26 @@ const authUserController = async (req: FastifyRequest, rep: FastifyReply) => {
       {
         sign: {
           sub: user.id,
-          expiresIn: "7d",
+          expiresIn: '7d',
         },
       }
     )
 
     rep.statusCode = 200
     rep
-    .setCookie("refreshToken", refreshToken, {
-      path: "/",
-      secure: true,
-      sameSite: true,
-      httpOnly: true,
-    })
-    .send({
-      accessToken,
-      user: {
-        id: user.id,
-        email: user.email,
-      },
-    })
+      .setCookie('refreshToken', refreshToken, {
+        path: '/',
+        secure: true,
+        sameSite: true,
+        httpOnly: true,
+      })
+      .send({
+        accessToken,
+        user: {
+          id: user.id,
+          email: user.email,
+        },
+      })
   } catch (e) {
     if (e instanceof InvalidCredentialsError) {
       rep.statusCode = 404
